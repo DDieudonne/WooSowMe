@@ -1,0 +1,23 @@
+<!-- NAVBAR COMPONENT -->
+<!-- <app-navbar-header></app-navbar-header> -->
+<app-navbar-menu></app-navbar-menu>
+<!-- NAVBAR COMPONENT -->
+
+<section class="first-section">
+    <main role="main" class="container notifs" *ngIf="notifMode">
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Notifications</h6>
+            <div class="media text-muted pt-3">
+                <img src="assets/images/user_blank.png" alt="32x32" class="mr-2 rounded" style="width: 32px; height: 32px;" data-holder-rendered="true"
+                />
+                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                    <strong class="d-block text-gray-dark">@ </strong>
+                    .
+                </p>
+            </div>
+            <small class="d-block text-right mt-3">
+                <button type="button " class="btn btn-success">Lire Tous</button>
+            </small>
+        </div>
+    </main>
+</section>

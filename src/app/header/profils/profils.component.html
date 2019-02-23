@@ -1,0 +1,133 @@
+<!-- NAVBAR COMPONENT -->
+<!-- <app-navbar-header></app-navbar-header> -->
+<app-navbar-menu></app-navbar-menu>
+<!-- NAVBAR COMPONENT -->
+<section class="first-section">
+  <div class="card my-card">
+    <div class="big-avatar">
+
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ dataGet?.name }}
+        </h5>
+
+        <p class="card-text" *ngIf="!dataGet?.hasAvatar">
+          <img src="assets/images/user_blank.png" alt="user">
+        </p>
+
+        <p class="card-text" *ngIf="dataGet?.hasAvatar">
+          <img src="{{ dataGet?.urlImg }}" alt="user">
+        </p>
+
+        <div class="full-infos">
+
+          <span *ngIf="dataGet?.age">
+            {{ dataGet?.age }} années
+          </span>
+
+          <span *ngIf="dataGet?.friendly">
+            Vous êtes amis
+          </span>
+
+          <span *ngIf="dataGet?.localisation">
+            Situé : {{ dataGet?.localisation }}
+          </span>
+
+          <span *ngIf="dataGet?.bio">
+            {{ dataGet?.bio }}
+          </span>
+
+        </div>
+
+        <div *ngIf="!dataGet?.friendly">
+          <span>
+            <i class="fa fa-lock" aria-hidden="true"></i>
+            Tant que vous n'êtes pas ami avec {{ dataGet?.name }} vous ne pourrez voir ses informations personnels.
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card my-card-bis">
+    <div class="card" *ngIf="dataGet?.friendly">
+      <div class="card-body">
+        <h5>
+          Ses Publications
+        </h5>
+        <div *ngFor="let pub of allPostUser" class="info-pub">
+          <span>
+            {{ pub?.infos?.date | amLocale:'fr' | amTimeAgo }}
+          </span>
+          <span>
+            de {{ pub?.infos?.namePoster }}
+          </span>
+          <span *ngIf="pub?.infos?.videoPostName">
+            {{ pub?.infos?.videoPostName }}
+          </span>
+
+          <video width="200" height="122" controls="controls" *ngIf="pub?.infos?.videoPosted">
+            <source [src]="pub?.infos?.videoPosted" type="video/mp4" />
+            <source [src]="pub?.infos?.videoPosted" type="video/webm" />
+            <source [src]="pub?.infos?.videoPosted" type="video/ogg" />
+          </video>
+
+          <span *ngIf="pub?.infos?.imagePostName">
+            {{ pub?.infos?.imagePostName }}
+          </span>
+
+          <span class="img-ready" *ngIf="pub?.infos?.imgPosted">
+            <img width="200" height="122" [src]="pub?.infos?.imgPosted" alt="posted" class="otherPosted">
+          </span>
+
+          <span *ngIf="pub?.infos?.message">
+            <h4>{{ pub?.infos?.message }}</h4>
+          </span>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="!dataGet?.friendly">
+      <div class="card-body">
+        <h5>
+          Ses Publications
+        </h5>
+        <div>
+          <i class="fa fa-lock" aria-hidden="true"></i>
+          Tant que vous n'êtes pas ami avec {{ dataGet?.name }} vous ne pourrez voir ses informations personnels.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card my-card-ter">
+    <div class="card">
+      <div class="card-body" *ngIf="dataGet?.friendly">
+        <h5>
+          Ses loisirs
+        </h5>
+        <span *ngIf="dataGet?.hobbies.length != 0">
+          <tag-input [(ngModel)]="itemsAsObjectsList"></tag-input>
+        </span>
+
+        <span *ngIf="dataGet?.hobbies.length == 0">
+          {{ dataGet?.name }} n'a pas renseigner de loisirs à ce jour.
+        </span>
+
+      </div>
+      <div class="card-body" *ngIf="!dataGet?.friendly">
+        <h5>
+          Ses loisirs
+        </h5>
+        <span>
+          <i class="fa fa-lock" aria-hidden="true"></i>
+          Tant que vous n'êtes pas ami avec {{ dataGet?.name }} vous ne pourrez voir ses informations personnels.
+        </span>
+      </div>
+    </div>
+  </div>
+
+</section>

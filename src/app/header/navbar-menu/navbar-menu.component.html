@@ -1,0 +1,363 @@
+<nav class="navbar navbar-light bg-light menu-fixed">
+
+  <ng-snotify></ng-snotify>
+
+  <a class="navbar-brand" href="#">
+    <img src="assets/fiveicon/icon-five.png" width="30" height="30" class="d-inline-block align-top" alt=""> Woosowme
+  </a>
+
+  <div class="navbar-search">
+
+    <div class="requests-friends">
+      <span class="round-plus">
+        {{ allRequest.length }} +
+      </span>
+      <span class="round-plus" *ngFor="let request of allRequest" (click)="showRequest(request)" data-toggle="modal" data-target="#modalREquest">
+        <img *ngIf="request?.requestInfos?.myImg" src="{{ request?.requestInfos?.myImg }}" alt="avatar">
+        <img *ngIf="!request?.requestInfos?.myImg" src="assets/images/user_blank.png" alt="avatar">
+      </span>
+    </div>
+
+    <span *ngIf="!myImg" class="spinner-img">
+      <img src="assets/images/spinner.gif" width="50" alt="spinner">
+    </span>
+
+    <div class="serach-bars">
+      <input type="text" autocomplete="off" #searchPersonsInput (input)="searchMode($event)" placeholder="Recherchez des amis"
+        class="form-control" id="exampleInputEmail1">
+      <div class="card search-card" *ngIf="dataTableMode">
+        <div class="card-body">
+          <div class="little-search">
+            <span class="little-search-icon">
+              Recherche en cours...
+            </span>
+            <span class="little-search-icon">
+              <img src="assets/images/spinner.gif" width="50" alt="spinner">
+            </span>
+          </div>
+          <ul class="list-group bmd-list-group-sm">
+
+            <li *ngFor="let user of allUsers | myfilter:searchPers" class="list-group-item add-user wth-icons">
+              <span *ngIf="user?.visibility && !user?.admin" class="final-search">
+
+                <div class="add-infos">
+                  <span *ngIf="user?.hasAvatar">
+                    <img src="{{  user?.photo  }}" alt="avatar" style="width : 20px; height : 20px; border-radius: 100%" alt="avatar ">
+                  </span>
+                  <span *ngIf="!user?.hasAvatar ">
+                    <img src="assets/images/user_blank.png" style="width : 20px; height : 20px; border-radius: 100%" alt="avatar " />
+                  </span>
+                  <span>
+                    {{ user?.name }}
+                  </span>
+                </div>
+
+                <div class="add-icons">
+                  <i class="fa fa-times" title="retirer la demande d'amis" *ngIf="user?.ImWaiting" style="color:rgb(206, 36, 36);cursor: pointer;"
+                    aria-hidden="true" (click)="deleteRequest(user)"></i>
+                  <i title="accepter la demande d'amis" class="fa fa-check" style="color:rgb(0, 230, 118);cursor: pointer;" aria-hidden="true"
+                    (click)="acceptRequest(user)" *ngIf="user?.isWaitingYou"></i>
+                  <i title="ajouter {{ user?.name }} dans votre liste d'amis" class="fa fa-user-plus" aria-hidden="true" *ngIf="user?.id != currentData?.id && !user?.friendly && !user?.Added && !user?.isWaitingYou"
+                    (click)="addFriends(user)"></i>
+                  <i (click)="seeProfil(user)" title="Voir le profil de {{ user?.name }}" class="fa fa-eye" *ngIf="user?.id != currentData?.id"
+                    aria-hidden="true" [routerLink]="['/app/application/acceuil']"></i>
+                  <i title="Communiquer avec {{ user?.name }}" class="fa fa-comments-o" aria-hidden="true" *ngIf="user?.id != currentData?.id && !user?.isChating && user?.friendly"
+                    (click)="addConversation(user)"></i>
+                </div>
+
+              </span>
+
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <button type="button " class="btn btn-primary colorHomeBtn" (click)="messengers()">
+      <i class="fa fa-comments" aria-hidden="true"></i>
+    </button>
+
+    <button type="button " class="btn btn-primary colorHomeBtn " (click)="MyFirends()">
+      <i class="fa fa-users" aria-hidden="true"></i>
+    </button>
+
+    <button type="button " class="btn btn-primary colorHomeBtn " (click)="myFriendPost()">
+      <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+    </button>
+
+    <button type="button " class="btn btn-primary colorHomeBtn " (click)="home() ">
+      <i class="fa fa-bullhorn" aria-hidden="true"></i>
+    </button>
+
+    <button class="navbar-brand " (click)="profile() ">
+      <img src="assets/images/user_blank.png " width="30 " height="30 " alt="avatar " *ngIf="!currentData?.hasAvatar ">
+      <img src="assets/images/lazyimg.gif " width="30 " height="30 " style="border-radius: 100% " alt="lazyavatar
+                  " *ngIf="currentData?.hasAvatar && !myImg ">
+      <img [src]="myImg " width="30 " height="30 " style="border-radius: 100% " alt="avatar " *ngIf="currentData?.hasAvatar
+                  && myImg ">
+    </button>
+
+    <button type="button " class="btn btn-primary colorHomeBtn " (click)="logOut() ">
+      <i class="fa fa-sign-out " aria-hidden="true "></i>
+    </button>
+  </div>
+</nav>
+
+
+<div class="card side-menu-left " style="width: 18rem; " *ngIf="profilIsHere ">
+  <ul class="list-group list-group-flush ">
+    <li class="list-group-item myname ">
+      <img src="assets/images/user_blank.png " width="30 " height="30 " alt="avatar " *ngIf="!currentData?.hasAvatar ">
+      <img src="assets/images/lazyimg.gif " width="30 " height="30 " style="border-radius: 100% " alt="lazyavatar
+                  " *ngIf="currentData?.hasAvatar && !myImg ">
+      <img [src]="myImg " width="30 " height="30 " style="border-radius: 100% " alt="avatar " *ngIf="currentData?.hasAvatar
+                  && myImg ">
+      <div> {{ currentData?.name }} </div>
+    </li>
+  </ul>
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+  id="myconversationModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <div class="istypingroomname">
+          <div class="img-name-conversation">
+            <img src="{{originalConversation?.conversation?.urlImg}}" alt="avatar" *ngIf="originalConversation?.conversation?.urlImg">
+            <img src="assets/images/user_blank.png" alt="avatar" *ngIf="!originalConversation?.conversation?.urlImg">
+            <div class="time-convers">
+              <h5 class="modal-title" id="exampleModalLongTitle">{{nameConversation}}</h5>
+              <span style="color:black!important">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span>
+                  {{ dateConversation | amLocale:'fr' | amCalendar}}
+                </span>
+              </span>
+              <span>
+                <button type="button" class="btn btn-raised btn-danger btn-sm" (click)="closeConversation()" data-dismiss="modal">Fermer la conversation</button>
+              </span>
+            </div>
+          </div>
+
+          <div class="istypingmode" *ngIf="writerInfos">
+            <span>{{writerInfos?.writerName}} est en train d'écrire quelques</span>
+            <img src="assets/images/typing.gif" alt="typingmode">
+          </div>
+
+        </div>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="chat-box-live">
+
+          <div *ngFor="let messC of messagesConversation">
+
+            <!-- MY MESSAGE -->
+
+            <div class="my-mess" *ngIf="currentData?.id == messC?.messageConversation?.idSender">
+              <div class="my-mess-bis">
+                <div class="img-msg-class">
+                  <img class="avatar" src="assets/images/user_blank.png" alt="avatar" *ngIf="!messC?.messageConversation?.myImg">
+                  <img class="avatar" src="{{ messC?.messageConversation?.myImg }}" alt="avatar" *ngIf="messC?.messageConversation?.myImg">
+                  <span>{{ messC?.messageConversation?.nameSender }}</span>
+                </div>
+                <div class="media-class-msg">
+                  <span>{{ messC?.message }}</span>
+                  <span class="img-sent" *ngIf="messC?.mediaIsHere">
+                    <video width="222" height="222" controls="controls" *ngIf="messC?.urlVid">
+                      <source src="{{messC?.urlVid}}" type="video/mp4" />
+                      <source src="{{messC?.urlVid}}" type="video/webm" />
+                      <source src="{{messC?.urlVid}}" type="video/ogg" />
+                    </video>
+                    <img src="{{ messC?.urlImg }}" alt="imgupload" (click)="openUrlWindow(messC?.urlImg)" *ngIf="messC?.urlImg">
+                    <a href="{{ messC?.urlImg }}" download *ngIf="messC?.urlImg">
+                      <button type="button" class="btn btn-raised btn-danger" download>Telecharger</button>
+                    </a>
+                    <a href="{{ messC?.urlVid }}" download *ngIf="messC?.urlVid">
+                      <button type="button" class="btn btn-raised btn-danger" download>Telecharger</button>
+                    </a>
+                  </span>
+                </div>
+              </div>
+              <span>{{ messC?.messageConversation?.dateCreation | amLocale:'fr' | amTimeAgo }}</span>
+            </div>
+
+
+            <!-- MY MESSAGE -->
+            <!-- OTHER MESSAGE -->
+            <div class="oth-mess" *ngIf="currentData?.id != messC?.messageConversation?.idSender">
+              <div class="oth-mess-bis">
+                <div class="img-msg-class">
+                  <img class="avatar" src="assets/images/user_blank.png" alt="avatar" *ngIf="!messC?.messageConversation?.myImg">
+                  <img class="avatar" src="{{ messC?.messageConversation?.myImg }}" alt="avatar" *ngIf="messC?.messageConversation?.myImg">
+                  <span>{{ messC?.messageConversation?.nameSender }}</span>
+                </div>
+                <div class="media-class-msg">
+                  <span>{{ messC?.message }}</span>
+                  <span class="img-sent" *ngIf="messC?.mediaIsHere">
+                    <video width="222" height="222" controls="controls" *ngIf="messC?.urlVid">
+                      <source src="{{messC?.urlVid}}" type="video/mp4" />
+                      <source src="{{messC?.urlVid}}" type="video/webm" />
+                      <source src="{{messC?.urlVid}}" type="video/ogg" />
+                    </video>
+                    <img src="{{ messC?.urlImg }}" alt="imgupload" (click)="openUrlWindow(messC?.urlImg)" *ngIf="messC?.urlImg">
+                    <a href="{{ messC?.urlImg }}" download *ngIf="messC?.urlImg">
+                      <button type="button" class="btn btn-raised btn-danger" download>Telecharger</button>
+                    </a>
+                    <a href="{{ messC?.urlVid }}" download *ngIf="messC?.urlVid">
+                      <button type="button" class="btn btn-raised btn-danger" download>Telecharger</button>
+                    </a>
+                  </span>
+                </div>
+              </div>
+              <span>{{ messC?.messageConversation?.dateCreation | amLocale:'fr' | amTimeAgo }}</span>
+            </div>
+            <!-- OTHER MESSAGE -->
+          </div>
+
+        </div>
+        <div class="media-class">
+          <img src="{{urlImg}}" alt="" *ngIf="urlImg">
+          <video width="222" height="222" controls="controls" *ngIf="previewVideoUrl">
+            <source [src]="previewVideoUrl" type="video/mp4" />
+            <source [src]="previewVideoUrl" type="video/webm" />
+            <source [src]="previewVideoUrl" type="video/ogg" />
+          </video>
+          <span> {{ purcentageNumber }}
+            <!-- <img src="assets/images/spinner.gif" alt="spinner"> -->
+          </span>
+        </div>
+        <div class="input-paper-clip-bx">
+          <label class="btn btn-primary btn-file">
+            <i class="fa fa-paperclip" aria-hidden="true"></i>
+            <input #fileInputMessage (change)="getMedia($event)" type="file" accept="image/*, video/*" style="display: none;">
+          </label>
+          <div class="form-group">
+            <label for="formGroupExampleInput" class="bmd-label-floating">Ecrire quelques chose</label>
+            <input type="text" #inputLive class="form-control" (keyup)="onKey($event)" (input)="writeEvent($event)" (keyup.enter)="sendMessageLive()"
+              id="formGroupExampleInput">
+          </div>
+          <div>
+            <button type="button" [disabled]="autorizationSentMess" class="btn btn-raised btn-success" (click)="sendMessageLive()">Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="all-conversation-box">
+  <div *ngFor="let convers of allConversations" id="live-chat">
+    <header class="clearfix" (click)="openChatMessage(convers)" data-toggle="modal" data-target="#myconversationModal" *ngIf="!convers?.conversation?.conversationIsClose">
+      <a href="#" class="chat-close" *ngIf="sawPerson?.idsees != convers?.lastMessage?.idUser && sawPerson?.dataSees < convers?.lastMessage?.date">
+        <i class="fa fa-certificate" aria-hidden="true"></i>
+      </a>
+      <div class="user-converse">
+        <span *ngIf="convers?.conversation?.urlImg">
+          <img src="{{ convers?.conversation?.urlImg }}" alt="" width="25" height="25">
+        </span>
+        <span *ngIf="!convers?.conversation?.urlImg">
+          <img src="assets/images/user_blank.png " width="25" height="25" alt="avatar">
+        </span>
+        <div>
+          <h4>{{ convers?.conversation?.nameUser }} </h4>
+        </div>
+      </div>
+    </header>
+  </div>
+
+</div>
+
+
+<button type="button" class="pulse-button" data-toggle="modal" data-target=".modal-dieudo">
+</button>
+
+<div class="modal fade bd-example-modal-lg modal-dieudo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="alert alert-danger" role="alert" *ngIf="modifiedName">
+        <strong>il est Interdit de modifier son NOM</strong>
+      </div>
+      <div class="alert alert-primary" role="alert" *ngIf="showCounting">
+        Vous pourrez renvoyer un message dans {{ valueCount }}
+      </div>
+      <div class="alert alert-success" role="alert" *ngIf="messageSent">
+        Votre message a été envoyé avec succès !!
+      </div>
+      <ul class="list-group bmd-list-group-sm">
+        <li class="contactsme">Informations</li>
+        <li class="list-group-item condition">
+          <div>
+            <span>Cette application est une application</span>
+            <span class="stronger"> TEST</span>
+            <span>, créee pour montrer ce que l'on peut faire avec</span>
+            <span class="stronger"> ANGULAR</span>
+            <span> et </span>
+            <span class="stronger">FIREBASE</span>
+            <span> , elle </span>
+            <span> n'est pas du tout optimisée et peut paraître lente à certains moments. Application développée en Angular 5, 6 &Firebase</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          Github
+          <i class="fa fa-github" aria-hidden="true"></i>
+          <a href="https://github.com/DDieudonne" target="_blank">
+            /DDieudonne
+          </a>
+        </li>
+        <li class="list-group-item">
+          Linkedin
+          <i class="fa fa-linkedin-square" aria-hidden="true"></i>
+          <a href="https://www.linkedin.com/in/darius-dieudonné-lando-191192134/" target="_blank">
+            darius-dieudonné-lando
+          </a>
+        </li>
+        <li class="list-group-item">
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+          <span>
+            2018
+          </span>
+        </li>
+        <li class="list-group-item myImage">
+          <img src="https://media.licdn.com/dms/image/C5603AQHwZeVc2ZVnAw/profile-displayphoto-shrink_200_200/0?e=1544659200&v=beta&t=sOQdzG3SOSDoCPWYGL3FBD_-1PanbqMwuhuT8Up-d0I"
+            alt="">
+          <span>
+            LANDO Dieudonné, Développeur Front End IONIC 3 & 4 , native CORDOVA, ANGULAR, MYSQL, MONGODB, FIREBASE.</span>
+        </li>
+      </ul>
+
+      <form [formGroup]="personForm">
+        <div class="form-group">
+          <label for="formGroupExampleInput" class="bmd-label-floating">Nom</label>
+          <input type="text" [attr.disabled]="true" formControlName="personNameControl" [(ngModel)]="namePerson" class="form-control"
+            id="formGroupExampleInput">
+        </div>
+        <div class="form-group">
+          <label for="formGroupExampleInput" class="bmd-label-floating">Email</label>
+          <input type="text" placeholder="laisse moi ta vraie adresse email" formControlName="personEmailControl" (input)="checkEmail($event)"
+            class="form-control" id="formGroupExampleInput">
+          <!-- <span >
+          </span> -->
+          <div *ngIf="personEmailControl.touched && !emailValid" class="alert alert-danger" role="alert">
+            Entrez une adresse email valide
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="exampleTextarea" class="bmd-label-floating">Message</label>
+          <textarea formControlName="personMessageControl" class="form-control" id="exampleTextarea" rows="3"></textarea>
+        </div>
+        <button type="button" [disabled]="personForm.invalid" (click)="sendMessageToDieudo(personForm)" class="btn btn-primary btn-raised">Envoyer</button>
+      </form>
+    </div>
+  </div>
+</div>

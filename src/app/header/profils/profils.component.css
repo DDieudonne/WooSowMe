@@ -1,0 +1,57 @@
+.my-card {
+    margin-top: 5%;
+    width: 60%;
+    position: relative;
+    left: 5%;
+}
+
+img{
+    border-radius: 10%;
+}
+
+.my-card-bis {
+    margin-top: 2%;
+    width: 60%;
+    position: relative;
+    left: 5%;
+    margin-bottom: 2%;
+}
+
+.my-card-ter{
+    margin-bottom: 2%;
+    width: 60%;
+    position: relative;
+    left: 5%;
+    margin-bottom: 2%;
+}
+
+.first-section {
+    min-height: 80vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-text img {
+    height: 100px;
+}
+
+.full-infos {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-comms {
+    margin-top: 5%;
+    display: flex;
+    align-items: center;
+}
+
+.info-pub {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}

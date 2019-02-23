@@ -1,0 +1,159 @@
+.home-container {
+    width: 100%;
+    min-height: 100vh;
+    background: #f2f2f2;
+}
+
+.first-section {
+    min-height: 80vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.my-card {
+    margin-top: 4%;
+    width: 60%;
+    position: relative;
+    left: 5%;
+}
+
+.big-avatar img {
+    height: 15vh;
+    border-radius: 10px;
+}
+
+.real-avatar {
+    border: 5px solid rgb(255, 174, 0);
+}
+
+.big-avatar {
+    padding: 5%;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 20%;
+}
+
+.wallpaper-class {
+    top: 30%;
+    position: absolute;
+    height: 100%;
+    z-index: -10;
+}
+
+.wallpaper-class i {
+    position: relative !important;
+    color: #1565C0 !important;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.wallpaper-class img {
+    height: 150%;
+    width: 95%;
+}
+
+.big-avatar i {
+    position: absolute;
+    font-size: 20px;
+    color: rgb(255, 174, 0);
+    left: 1%;
+}
+
+.canvas-block {
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+    border-radius: 10px;
+}
+
+.generated-img {
+    display: flex;
+    justify-content: center;
+}
+
+.generated-img img {
+    height: 50vh;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 6px #00000038;
+}
+
+.header-upload button,
+.header-upload input {
+    width: 30%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.header-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loading-spinner img {
+    border-radius: 10%;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.267);
+}
+
+.loading-spinner {
+    position: fixed;
+    height: 50%;
+    width: 25%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    z-index: 1000000;
+    top: 25%;
+    border-radius: 10%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.purcentage {
+    font-size: 30px;
+    color: orangered;
+    position: absolute;
+    bottom: 10%;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+
+.loading-img {
+    width: 20% !important;
+    background-size: cover !important;
+}
+
+.see-or-not {
+    display: flex;
+}
+
+.see-or-not i {
+    font-size: 20px;
+    color: rgb(255, 174, 0);
+    cursor: pointer;
+}
+
+.alert-position {
+    position: fixed;
+    z-index: 10000000;
+    top: 10%;
+    right: 1%;
+    width: 25%;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.315);
+}
+
+.localisation {
+    display: flex;
+    flex-direction: column;
+}
+
+.tag-loisirs{
+    margin-top: 2%;
+    margin-bottom: 2%;
+}

@@ -1,0 +1,142 @@
+.first-section {
+    min-height: 80vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+#monid {
+    color: red;
+}
+
+.header-messages {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 2%;
+    padding: 2%;
+}
+
+.header-messages:hover {
+    background-color: rgba(192, 192, 192, 0.164);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.my-card {
+    margin-top: 5%;
+    width: 60%;
+    position: relative;
+    left: 5%;
+}
+
+.user-avatar-infos {
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+.user-avatar-infos img {
+    height: 50px;
+}
+
+.message-hour {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2%;
+    width: 60%;
+}
+
+.names {
+    font-weight: bolder;
+    color: rgb(255, 173, 0);
+}
+
+.hours {
+    font-size: 12px;
+    color: silver;
+}
+
+.empty-messenger {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 30px;
+}
+
+.empty-messenger i {
+    font-size: 50px;
+    color: rgb(255, 173, 0);
+}
+
+.first-section {
+    min-height: 80vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.my-card {
+    margin-top: 4%;
+    width: 60%;
+    position: relative;
+    left: 5%;
+}
+
+.img-request img {
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+}
+
+.fa-eye {
+    color: rgb(255, 173, 0);
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.fa-times {
+    color: #D32F2F;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.final-step {
+    display: flex;
+    align-items: center;
+}
+
+.empty-tab {
+    display: flex;
+    flex-direction: column;
+    font-size: 30px;
+    text-align: center;
+}
+
+.empty-tab i {
+    font-size: 50px;
+    color: rgb(255, 173, 0);
+}
+
+.notifs {
+    width: 70%;
+    margin-left: 25%;
+    margin-top: 4%
+}
+
+.notif-alert {
+    position: absolute;
+    right: 3%;
+    bottom: 0;
+    z-index: 1000000000;
+    width: 20%;
+}
+
+.img-friend img {
+    height: 50px;
+}

@@ -1,0 +1,162 @@
+<body>
+
+  <div class="loading-spinner" *ngIf="isUploadModeSpinner">
+    <img src="assets/images/spinner.gif" alt="spinner loading">
+    <span class="purcentage">{{ purcentageNumber }} %</span>
+  </div>
+
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+    id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content header-upload">
+
+        <div class="canvas-block">
+          <video id="video" width="440" height="280" autoplay></video>
+        </div>
+
+        <div class="canvas-block" *ngIf="!snapInitMode">
+          <canvas id="canvas" width="440" height="280"></canvas>
+        </div>
+
+        <button type="button" class="btn btn-raised btn-danger" (click)="takePictureFunction()" *ngIf="snapInitMode">Utiliser la Webcam</button>
+
+        <button type="button" class="btn btn-raised btn-info" (click)="takeRealPicture()" *ngIf="!snapInitMode">Prendre une photo</button>
+
+        <div class="generated-img" *ngIf="mediaImportedOK">
+          <img [src]="urlImage" alt="imgGetit">
+        </div>
+
+        <input type="file" class="btn btn-raised btn-info" (change)="getImgByDesktop($event)" accept="image/*" #myInput value="Importer une image"
+          *ngIf="snapInitMode">
+
+        <button *ngIf="btnSaveIsOk" type="button" class="btn btn-raised btn-success" data-dismiss="myModal" (click)="saveFile()">Valider</button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="home-container">
+
+    <div class="alert alert-warning alert-dismissible fade show alert-position" role="alert" *ngIf="wrongPassWord">
+      <strong>Mot de passe invalid!</strong>
+      <br> 1° Le nouveau mot de passe doit contenir 8 caractères
+      <br> 2° Il doit contenir des Lettres et des chiffres
+      <br> 3° Les deux chanps 'Nouveau mot de passe et Retapez mot de passe doivent etre égaux'
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="alert alert-success alert-dismissible fade show alert-position" role="alert" *ngIf="goodPassWord">
+      <strong>Mot de passe Valide!</strong>
+      Veuillez Sauvegarder pour enregistrer le nouveau mot de passe.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <!-- NAVBAR COMPONENT -->
+    <!-- <app-navbar-header></app-navbar-header> -->
+    <app-navbar-menu></app-navbar-menu>
+    <!-- NAVBAR COMPONENT -->
+    <section class="first-section">
+      <div class="card my-card">
+        <div class="big-avatar">
+          <!-- ME -->
+          <div class="wallpaper-class">
+            <img *ngIf="!currentData?.hasBackground" src="assets/images/wallpaper-test.jpg" alt="avatarPage">
+            <img *ngIf="currentData?.hasBackground" [src]="myImgBackground" alt="avatarPage">
+            <i class="fa fa-picture-o" aria-hidden="true" data-toggle="modal" (click)="changeBackground('background')" data-target="#myModal"></i>
+          </div>
+          <!-- ME -->
+
+          <span>
+            <i class="fa fa-camera" aria-hidden="true" data-toggle="modal" data-target="#myModal" (click)="changeBackground('avatar')"></i>
+            <img *ngIf="!myImg && changeImgMode" class="loading-img" src="assets/images/spinner.gif" width="50" alt="spinner">
+            <img class="real-avatar" src="assets/images/user_blank.png" alt="avatar" *ngIf="!currentData?.hasAvatar" />
+            <img class="real-avatar" [src]="myImg" alt="avatar" *ngIf="currentData?.hasAvatar && myImg">
+          </span>
+
+        </div>
+
+        <div class="card-body">
+
+          <div class="form-group">
+            <label for="exampleInputEmail1">{{ currentData?.name }}</label>
+          </div>
+
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <button type="button" (click)="viewInSearch('visible')" *ngIf="visibleState" class="btn btn-outline-primary">Vous êtes Visible</button>
+              <button type="button" (click)="viewInSearch('invisible')" *ngIf="!visibleState" class="btn btn-warning">Vous êtes Invisible</button>
+            </span>
+          </div>
+
+
+          <div class="form-group">
+            <label for="exampleInputEmail1">Age</label>
+            <input type="text" placeholder="{{ currentData?.age }}" #ageInput (input)="checkAgeInput($event)" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInputEmail1">Localisation</label>
+            <input type="text" placeholder="{{currentData?.localisation}}" #locaInput (input)="checkLocationInput($event)" class="form-control">
+            <!--  -->
+            <div class="card" *ngIf="localIsOK">
+              <div class="card-header localisation" *ngFor="let local of getDatasLocal" (click)="selectLocalisation(local)">
+                <span>
+                  {{ local?.nom }}
+                </span>
+                <span>
+                  {{ local?.code }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleTextarea" class="bmd-label-floating">Biographie</label>
+            <textarea class="form-control" #bioInput id="exampleTextarea" (input)="checkBio($event)" placeholder="{{currentData?.bio}}"
+              rows="3"></textarea>
+          </div>
+
+          <div class="tag-loisirs">
+            <span>
+              Tes loisirs
+            </span>
+            <tag-input placeholder="Ajouter des loisirs" (onRemove)="onItemRemoved($event)" (onAdd)="onItemAdded($event)" [(ngModel)]="itemsAsObjectsList"></tag-input>
+          </div>
+
+          <button type="button" class="btn btn-raised btn-primary" [disabled]="!somethingHasChangeText" (click)="saveDateUser()">Sauvegarder</button>
+
+          <div [formGroup]="passForm">
+
+            <div class="form-group">
+              <label for="exampleInputPassword1">Nouveau mot de passe</label>
+              <div class="see-or-not">
+                <input type="{{typeInputModeNew}}" #inputNew (input)="checkPassWord('new',$event)" formControlName="newPassControl" class="form-control"
+                  placeholder="Nouveau Mot de passe">
+                <i class="fa fa-eye" aria-hidden="true" (click)="changeTypeInput('newO')" *ngIf="eyeModePassword"></i>
+                <i class="fa fa-eye-slash" aria-hidden="true" (click)="changeTypeInput('newC')" *ngIf="!eyeModePassword"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="exampleInputPassword1">Retapez Nouveau mot de passe</label>
+              <div class="see-or-not">
+                <input type="{{typeInputModeRetp}}" #inputRtp (input)="checkPassWord('retp',$event)" formControlName="retapPassControl" class="form-control"
+                  placeholder="Retapez">
+                <i class="fa fa-eye" aria-hidden="true" (click)="changeTypeInput('retO')" *ngIf="eyeModePasswordRtp"></i>
+                <i class="fa fa-eye-slash" aria-hidden="true" (click)="changeTypeInput('retC')" *ngIf="!eyeModePasswordRtp"></i>
+              </div>
+            </div>
+
+          </div>
+          <button type="button" class="btn btn-raised btn-primary" [disabled]="!somethingHasChange && !goodPassWord" (click)="changeInfos()">Sauvegarder</button>
+
+        </div>
+      </div>
+    </section>
+  </div>
+</body>

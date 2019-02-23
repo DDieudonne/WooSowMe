@@ -1,0 +1,352 @@
+<div class="loading-spinner" *ngIf="isUploadVideoOK">
+  <img src="assets/images/spinner.gif" alt="">
+  <span class="purcentage">{{ purcentageNumber }} %</span>
+</div>
+
+<body class="body">
+
+  <!-- MODALVIEW POST -->
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- CREATOR -->
+        <div class="alert alert-dark">
+          <span *ngIf="!creatorhasAvatar">
+            <img src="assets/images/user_blank.png" width="50" height="50" alt="avatar" />
+          </span>
+          <span *ngIf="creatorhasAvatar">
+            <img src="{{detailCreatorImg}}" width="50" height="50" alt="avatar" />
+          </span>
+          <span>
+            {{ detailCreatorName }}
+          </span>
+        </div>
+        <!-- CREATOR -->
+
+        <div class="final-posted">
+
+          <!-- SUBJECT IMG O VIDEO -->
+          <div class="imgorvideo">
+            <span class="img-ready" *ngIf="detailImg && detailImg != null">
+              <img [src]="detailImg" alt="posted" class="otherPosted">
+            </span>
+            <video controls="controls" *ngIf="detailVideos">
+              <source [src]="detailVideos" type="video/mp4" />
+              <source [src]="detailVideos" type="video/webm" />
+              <source [src]="detailVideos" type="video/ogg" />
+            </video>
+            <div *ngIf="!detailVideos && !detailImg">
+              {{ messageDetail }}
+            </div>
+          </div>
+          <!-- SUBJECT IMG O VIDEO -->
+
+          <div class="like-conversations">
+            <!-- MESSAGE CONVERSATION -->
+
+            <!-- MESSAGE WORLD -->
+            <div *ngIf="postModeWorld" class="list-group convsersations chat-box">
+
+              <!-- MESSAGES -->
+              <div *ngIf="!likeShow">
+                <span *ngFor="let convers of allMessDetails">
+                  <div class="infos-sender">
+                    <div class="icon-img">
+                      <span *ngIf="!convers?.hasAvatar">
+                        <img src="assets/images/user_blank.png" width="50" height="50" alt="avatar" />
+                      </span>
+                      <span *ngIf="convers?.hasAvatar">
+                        <img src="{{convers?.avatarUser}}" width="50" height="50" alt="avatar" />
+                      </span>
+                    </div>
+                    <strong>
+                      {{ convers?.namePoster }}
+                    </strong>
+                    &nbsp;
+                    <span>
+                      {{ convers?.message }}
+                    </span>
+                  </div>
+                </span>
+              </div>
+              <!-- MESSAGES -->
+
+              <!-- LIKES -->
+              <div *ngIf="likeShow">
+                <div *ngFor="let like of allLikesDetails">
+                  <div class="whoslikeclass">
+                    <span *ngIf="!like?.whoslike?.hasAvatar">
+                      <img src="assets/images/user_blank.png" alt="avatar">
+                    </span>
+                    <span *ngIf="like?.whoslike?.hasAvatar">
+                      <img src="{{like?.whoslike?.avatarUser}}" alt="avatar">
+                    </span>
+                    <div class="date-like-class">
+                      <span>{{ like?.whoslike?.namePoster }}</span>
+                      <span>{{ like?.whoslike?.date | amLocale:'fr' | amTimeAgo }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- LIKES -->
+
+            </div>
+            <!-- MESSAGE WORLD -->
+
+            <!-- MESSAGE FRIENDS -->
+            <div *ngIf="!postModeWorld" class="list-group convsersations chat-box">
+
+              <!-- MESSAGES -->
+
+              <div *ngIf="!likeShow">
+                <span *ngFor="let convers of allMessFriendsDetails">
+                  <div class="infos-sender">
+                    <div class="icon-img">
+                      <span *ngIf="!convers?.hasAvatar">
+                        <img src="assets/images/user_blank.png" width="50" height="50" alt="avatar" />
+                      </span>
+                      <span *ngIf="convers?.hasAvatar">
+                        <img src="{{convers?.avatarUser}}" width="50" height="50" alt="avatar" />
+                      </span>
+                    </div>
+                    <strong>
+                      {{ convers?.namePoster }}
+                    </strong>
+                    &nbsp;
+                    <span>
+                      {{ convers?.message }}
+                    </span>
+                  </div>
+                </span>
+              </div>
+              <!-- MESSAGES -->
+
+              <!-- LIKES -->
+              <div *ngIf="likeShow">
+                <div *ngFor="let like of allLikesDetails">
+                  <div class="whoslikeclass">
+                    <span *ngIf="!like?.whoslike?.hasAvatar">
+                      <img src="assets/images/user_blank.png" alt="avatar">
+                    </span>
+                    <span *ngIf="like?.whoslike?.hasAvatar">
+                      <img src="{{like?.whoslike?.avatarUser}}" alt="avatar">
+                    </span>
+                    <div class="date-like-class">
+                      <span>{{ like?.whoslike?.namePoster }}</span>
+                      <span>{{ like?.whoslike?.date | amLocale:'fr' | amTimeAgo }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- LIKES -->
+
+            </div>
+            <!-- MESSAGE FRIENDS -->
+
+            <!-- MESSAGE CONVERSATION -->
+            <div *ngIf="messageForm">
+              <div class="input-like" [formGroup]="messageForm">
+                <i class="fa fa-heart-o" aria-hidden="true" (click)="likeEvent('islike')" *ngIf="!allReadyLiked"></i>
+                <i class="fa fa-heart" aria-hidden="true" (click)="likeEvent('dislike')" *ngIf="allReadyLiked"></i>
+                <span (mouseenter)="showLikes('true')" (mouseleave)="showLikes('false')">{{allLikesDetails?.length}} J'aimes</span>
+                <span class="ago-time">{{dateImgOrVideo | amLocale:'fr' | amTimeAgo }}</span>
+                <div class="form-group">
+                  <label for="formGroupExampleInput" class="bmd-label-floating">Message</label>
+                  <input type="text" class="form-control" formControlName="messageTextControl" (keyup.enter)="sendMessageDetails(messageForm)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="home-container">
+    <!-- NAVBAR COMPONENT -->
+    <app-navbar-menu></app-navbar-menu>
+    <!-- NAVBAR COMPONENT -->
+    <section class="first-section">
+      <!-- POST SOMETHING -->
+      <div class="card post-card">
+
+        <div class="card-header">
+          <div>
+            <button type="button" class="btn btn-success" (click)="postMode()">
+              <i class="fa fa-globe" aria-hidden="true"></i>
+              Publication
+            </button>
+          </div>
+
+          <!-- WORLD PUBLICATION -->
+          <div *ngIf="postModeWorld" class="icons-post">
+            <div class="wrapper" *ngIf="showMessInfos">
+              <span id="slide">Publications public ( N'importe qui peut voir )</span>
+            </div>
+            <i (mouseenter)="setInfosIcon('public')" (mouseleave)="setInfosIconLeave('public')" class="fa fa-bullhorn" aria-hidden="true"></i>
+          </div>
+          <!-- WORLD PUBLICATION -->
+
+          <!-- FRIENDS PUBLICATION -->
+          <div *ngIf="!postModeWorld" class="icons-post">
+            <div class="wrapper" *ngIf="showMessInfos">
+              <span id="slide">Publications privées ( seule vos amis peuvent voir )</span>
+            </div>
+            <i (mouseenter)="setInfosIcon('private')" (mouseleave)="setInfosIconLeave('private')" class="fa fa-user-circle-o" aria-hidden="true"></i>
+          </div>
+          <!-- FRIENDS PUBLICATION -->
+
+        </div>
+
+        <div class="section-post">
+
+          <div class="card-body" *ngIf="myGroup">
+            <div [formGroup]="myGroup">
+              <div class="form-group" *ngIf="!photoMode && !videoMode && !storyModeTrue">
+                <label for="formGroupExampleInput" class="bmd-label-floating">Poste quelques choses</label>
+                <input type="text" class="form-control" (input)="checkInput($event)" [(ngModel)]="messgeInput" id="formGroupExampleInput"
+                  formControlName="postControl">
+              </div>
+
+              <section class="devise-upload">
+
+                <div class="medias">
+                  <!-- MEDIA POST PHOTO -->
+                  <div class="media-post">
+
+                    <!-- NORMAL -->
+                    <button *ngIf="!writeMode && !storyModeTrue" type="button" [disabled]="isPhotoBtn" (mouseenter)="mediaEventOn('photo')" (mouseleave)="mediaEventOff('photo')"
+                      class="btn btn-raised">
+                      <label class="btn-input" for="fileupload2">
+                        <i class="fa fa-picture-o media-photo-icon" aria-hidden="true" title="Poster une photo"></i>
+                        <input type="file" #myInput id="fileupload2" accept="image/*" (change)="getImagePost($event)">
+                      </label>
+                    </button>
+                    <!-- NORMAL -->
+
+                    <!-- MEDIA POST PHOTO -->
+
+                    <!-- MEDIA POST VIDEO -->
+
+                    <!-- NORMAL -->
+                    <button *ngIf="!writeMode && !storyModeTrue" type="button" [disabled]="isVideoBtn" (mouseenter)="mediaEventOn('video')" (mouseleave)="mediaEventOff('video')"
+                      class="btn btn-raised">
+                      <label class="btn-input" for="fileupload">
+                        <i class="fa fa-video-camera" aria-hidden="true" title="Poster une vidéo"></i>
+                        <input type="file" id="fileupload" #myInput accept="video/*" (change)="getVideoPost($event)">
+                      </label>
+                    </button>
+                    <!-- NORMAL -->
+
+                    <!-- MEDIA POST VIDEO -->
+
+                  </div>
+
+                  <span class="max-file-size" *ngIf="isPhotoBtn">
+                    Fichier Vidéo 3 MB max.
+                  </span>
+
+                  <span class="max-file-size" *ngIf=" isVideoBtn">
+                    Fichier Image 3 MB max.
+                  </span>
+
+
+                  <div class="sharebtnfull">
+                    <button type="button" [disabled]="!isFinishLoading" class="btn btn-raised btn-success" *ngIf="postModeTrue"
+                      (click)="sendPost(myGroup)">Partage</button>
+                  </div>
+
+                </div>
+
+                <div>
+                  <div class="img-ready">
+                    <img [src]="url" *ngIf="isMediaOK">
+                    <video width="400" height="222" controls="controls" *ngIf="isMediaVideoOK">
+                      <source [src]="previewVideoUrl" type="video/mp4" />
+                      <source [src]="previewVideoUrl" type="video/webm" />
+                      <source [src]="previewVideoUrl" type="video/ogg" />
+                    </video>
+                  </div>
+                </div>
+
+              </section>
+
+            </div>
+          </div>
+
+          <div class="final-post-section">
+
+            <!-- POST OF THE WORDL -->
+            <span *ngIf="postModeWorld">
+              <div class="card all-post" *ngFor="let message of allPostBox">
+                <div class="card-body">
+                  <p class="card-time">{{ message?.infos?.date | amLocale:'fr' | amTimeAgo }}</p>
+                  <div class="post-infos-avatar">
+                    <div *ngIf="!message?.infos?.avatarUser">
+                      <img src="assets/images/user_blank.png" width="50" height="50" alt="avatar" />
+                    </div>
+                    <div *ngIf="message?.infos?.avatarUser">
+                      <img src="{{message?.infos?.avatarUser}}" width="50" height="50" alt="avatar" />
+                    </div>
+                    <h5 class="card-title">{{ message?.infos?.namePoster }}</h5>
+                    <span class="img-ready" *ngIf="message?.infos?.imagePostName && message?.infos?.imgPosted != null">
+                      <img [src]="message?.infos?.imgPosted" alt="posted" class="otherPosted">
+                    </span>
+                    <video width="400" height="222" controls="controls" *ngIf="message?.infos?.videoPosted">
+                      <source [src]="message?.infos?.videoPosted" type="video/mp4" />
+                      <source [src]="message?.infos?.videoPosted" type="video/webm" />
+                      <source [src]="message?.infos?.videoPosted" type="video/ogg" />
+                    </video>
+                  </div>
+                  <p class="card-text">{{ message?.infos?.message }}</p>
+                  <div class="all-btn-post">
+                    <button type="button" class="btn btn-raised btn-warning" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="detailMessage(message)">Voir la Publication</button>
+                  </div>
+                </div>
+              </div>
+            </span>
+            <!-- POST OF THE WORDL -->
+
+
+            <!-- POST OF MY FRIENDS -->
+            <span *ngIf="!postModeWorld">
+              <div class="card all-post" *ngFor="let message of allPostFriendsBox">
+                <div class="card-body">
+                  <p class="card-time">{{ message?.infos?.date | amLocale:'fr' | amTimeAgo }}</p>
+                  <div class="post-infos-avatar">
+                    <div *ngIf="!message?.infos?.hasAvatar">
+                      <img src="assets/images/user_blank.png" width="50" height="50" alt="avatar" />
+                    </div>
+                    <div *ngIf="message?.infos?.hasAvatar">
+                      <img src="{{message?.infos?.avatarUser}}" width="50" height="50" alt="avatar" />
+                    </div>
+                    <h5 class="card-title">{{ message?.infos?.namePoster }}</h5>
+                    <span class="img-ready" *ngIf="message?.infos?.imagePostName && message?.infos?.imgPosted != null">
+                      <img [src]="message?.infos?.imgPosted" alt="posted" class="otherPosted">
+                    </span>
+                    <video width="400" height="222" controls="controls" *ngIf="message?.infos?.videoPosted">
+                      <source [src]="message?.infos?.videoPosted" type="video/mp4" />
+                      <source [src]="message?.infos?.videoPosted" type="video/webm" />
+                      <source [src]="message?.infos?.videoPosted" type="video/ogg" />
+                    </video>
+                  </div>
+                  <p class="card-text">{{ message?.infos?.message }}</p>
+                  <div class="all-btn-post">
+                    <button type="button" class="btn btn-raised btn-warning" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="detailMessage(message)">Voir la publication</button>
+                  </div>
+                </div>
+              </div>
+            </span>
+            <!-- POST OF MY FRIENDS  -->
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+</body>

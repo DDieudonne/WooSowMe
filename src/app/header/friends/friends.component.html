@@ -1,0 +1,44 @@
+<!-- NAVBAR COMPONENT -->
+<!-- <app-navbar-header></app-navbar-header> -->
+<app-navbar-menu></app-navbar-menu>
+<!-- NAVBAR COMPONENT -->
+
+<section class="first-section">
+  <div class="card my-card">
+    <div class="card-body">
+      <ul class="list-group">
+        <li *ngFor="let friend of  allMyFriends" class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+
+            <span class="img-friend" *ngIf="!friend?.infosFriend?.hasAvatarFriend">
+              <img src="assets/images/user_blank.png" alt="avatar">
+            </span>
+
+            <span class="img-friend" *ngIf="friend?.infosFriend?.hasAvatarFriend">
+              <img src="{{ friend?.infosFriend?.urlImg }}" alt="avatar">
+            </span>
+
+            <span>
+              {{ friend?.infosFriend?.nameFriend }}
+            </span>
+
+          </div>
+          <div class="final-step">
+            <span class="close" (click)="finalStep('del',friend)">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </span>
+          </div>
+        </li>
+        <li *ngIf="allMyFriends.length == 0" class="empty-messenger">
+          <span>
+            <i class="fa fa-users" aria-hidden="true"></i>
+          </span>
+          <span>
+            Vous n'avez pas encore d'amis
+          </span>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</section>
